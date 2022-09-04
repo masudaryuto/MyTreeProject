@@ -1,15 +1,17 @@
 package forest;
 
-public class Controller implements KeyListener {
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
 
-	private Model aModel;
-
-	private View aView;
+public class Controller extends Object implements KeyListener {
 
 	private Model model;
 
-	public Controller() {
+	private View view;
 
+	public Controller(Model aModel) {
+		this.model = aModel;
+		this.view = null;
 	}
 
 	public void chooseText() {
@@ -20,4 +22,18 @@ public class Controller implements KeyListener {
 
 	}
 
+	public void keyPressed(KeyEvent e){
+
+		return;
+	}
+
+	public void keyReleased(KeyEvent e){
+
+		return;
+	}
+
+	public void keyTyped(KeyEvent e){
+
+		return;
+	}
 }
