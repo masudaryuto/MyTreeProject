@@ -87,6 +87,7 @@ public class View extends JComponent implements Accessible {
 			nodeLabel.add(aLabel);
 		}
 
+		// 全ての単語を表示
 		for(int i=1; i<nodes.size(); i++){
 			Dimension aDimension = new Dimension(7 * nodes.get(i).length(), 15);
 			Point aPoint = new Point(5, (aDimension.height * (i-1)));
@@ -98,8 +99,20 @@ public class View extends JComponent implements Accessible {
 			nodeLabel.get(i).setSize(nodeLabel.get(i).getPreferredSize());
 			aPanel.add(nodeLabel.get(i));
 		}
+
 		
-		// aLabel.setBounds(10, 10 + (15 * i), 30, 15);
+		// アニメーション処理
+		this.animation();
+
+		return;
+	}
+
+	/* アニメーション実行させます。 */
+	public void animation(){
+		ArrayList rootList = this.model.getRoot();
+
+		// * それぞれの単語の初期座標を記録して、関数を利用して、その単語の座標が変わったら、
+		// その単語の座標を変更できるようにする必要がある。
 
 
 		return;
