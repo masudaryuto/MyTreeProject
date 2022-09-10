@@ -28,6 +28,8 @@ public class Model extends Object {
 	/* 先頭のnodeを格納 */
 	private ArrayList<Integer> rootList;
 
+	/* 文字に対応する座標を格納 */
+	private ArrayList<Point> nowPointList;
 
 	private Point point;
 
@@ -37,6 +39,7 @@ public class Model extends Object {
 		this.branchesMap = new HashMap<>();
 		this.nodeList = new ArrayList<>();
 		this.rootList = new ArrayList<>();
+		this.nowPointList = new ArrayList<>();
 		this.point = null;
 		return;
 	}
@@ -86,6 +89,7 @@ public class Model extends Object {
 		}
 
 		this.analyText();
+		this.InitPosition();
 
 		return;
 	}
@@ -101,10 +105,6 @@ public class Model extends Object {
 			}
 		}
 
-		for(int address=0; address < this.rootList.size(); address++){
-
-			System.out.println(this.rootList.get(address));
-		}
 		return;
 	}
 
@@ -113,8 +113,20 @@ public class Model extends Object {
 		return;
 	}
 
-	public void decidePosition() {
+	/* 座標の初期化 */
+	public void InitPosition() {
+		this.nowPointList.add(new Point(-1, -1));
+		for(int address=1; address<this.nodeList.size(); address++){
+			this.nowPointList.add(new Point(0, 0));
+		}
 
+		return;
+	}
+
+	public void UpdatePosition(int address, int x, int y) {
+
+		this.nowPointList.set(address, new Point(x, y));
+		
 		return;
 	}
 
@@ -138,5 +150,9 @@ public class Model extends Object {
 		return this.rootList;
 	}
 
+	public ArrayList<Point> getPosition(){
+
+		return this.nowPointList;
+	}
 
 }
