@@ -58,22 +58,22 @@ public class View extends JComponent implements Accessible {
 			chooser.getSelectedFile().getName());
 			this.model.readText(chooser.getSelectedFile());
 
+			// 高さはタイトルバーの高さを考慮してウィンドウの大きさを決定する。
+			aWindow.addNotify();
+			int titleBarHeight = aWindow.getInsets().top;
+			aWindow.setSize(600, 400 + titleBarHeight);
+			aWindow.setResizable(true);
+			// ウィンドウに各種の設定を行って出現させる。
+			aWindow.setLocationRelativeTo(null);
+			aWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			aWindow.setVisible(true);
+			aWindow.toFront();
 			//描画の更新
 			this.updateWindow(aWindow);
 		}
 		
 		
 		
-		// 高さはタイトルバーの高さを考慮してウィンドウの大きさを決定する。
-		aWindow.addNotify();
-		int titleBarHeight = aWindow.getInsets().top;
-		aWindow.setSize(600, 400 + titleBarHeight);
-		aWindow.setResizable(true);
-		// ウィンドウに各種の設定を行って出現させる。
-		aWindow.setLocationRelativeTo(null);
-		aWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		aWindow.setVisible(true);
-		aWindow.toFront();
 
 
 
@@ -161,7 +161,8 @@ public class View extends JComponent implements Accessible {
 			this.model.UpdatePosition(address, aPoint.x, aPoint.y);
 
 			this.drawLabel(address);
-			break;
+
+			
 		}
 		
 		
@@ -171,15 +172,17 @@ public class View extends JComponent implements Accessible {
 	// int h=0;
 	int i=0;
 	boolean end = false;
+
 	public void drawLabel(int address){
 		HashMap<Integer, Integer> branchesMap = this.model.getBranchMap();
 		ArrayList<String> nodes = this.model.getNodes();
-		
 		boolean flag = true;
+		int countReef = 0;
 		for(Integer nowAddress : branchesMap.values()){
 
 			if( nowAddress.equals(address)){
 				flag = false;
+				countReef++;
 			}
 		}
 		if(flag){ 
@@ -193,10 +196,12 @@ public class View extends JComponent implements Accessible {
 		i++;
 		// h++;
 		for(Integer nowAddress : branchesMap.keySet()){
-
+			
 			if( branchesMap.get(nowAddress).equals(address)){
+				ArrayList<Point> aPointList = this.model.getPosition();
+
 				Dimension aDimension = new Dimension(7 * nodes.get(nowAddress).length(), 15);
-				Point aPoint = new Point(100*(i), (aDimension.height * (h)) + 100*(h));
+				Point aPoint = new Point(aPointList.get(address).x + 100*(i),  (aPointList.get(address).y / countReef) + (h * (aPointList.get(address).y / countReef)));
 	
 				this.nodeLabel.get(nowAddress).setFont(new Font(Font.SERIF, Font.PLAIN, 12));
 				this.nodeLabel.get(nowAddress).setBounds(aPoint.x, aPoint.y, aDimension.width, aDimension.height);
@@ -213,9 +218,11 @@ public class View extends JComponent implements Accessible {
 				System.out.println(nodes.get(nowAddress));
 				System.out.println(i);
 				
+				
+				this.sleep(800);
+
 				this.drawLabel(nowAddress);
 				h++;
-
 			}
 		}
 		i--;
@@ -223,6 +230,17 @@ public class View extends JComponent implements Accessible {
 		return;
 	}
 
+	public void sleep(long ms){
+
+		try{
+			Thread.sleep(800);
+		}catch(InterruptedException e){
+			System.err.println(e);
+		}
+
+		return;
+	}
+	
 	public void deleteWordLabel(){
 
 		return;
