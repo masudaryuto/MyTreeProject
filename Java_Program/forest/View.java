@@ -6,29 +6,33 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-
 import javax.accessibility.Accessible;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.util.HashMap;
-import java.awt.Graphics;
 
+/*
+ * 
+ */
 public class View extends JComponent implements Accessible {
 	
+	/* */
 	private Controller controller;
 	
+	/* */
 	private Model model;
 
+	/* */
 	private ArrayList<JLabel> nodeLabel;
+
+	/* */
 	ExtendJPanel panel;
 
-
-
+	/* */
 	public View(Model aModel, Controller aController) {
 
 		this.model = aModel;
@@ -39,6 +43,7 @@ public class View extends JComponent implements Accessible {
 		return;
 	}
 
+	/* */
 	public void displayWindow() {
 		// ウィンドウのインスタンスを生成する。
 		JFrame aWindow = new JFrame("TreeAlignment");
@@ -71,15 +76,11 @@ public class View extends JComponent implements Accessible {
 			//描画の更新
 			this.updateWindow(aWindow);
 		}
-		
-		
-		
-
-
 
 		return;
 	}
 
+	/* */
 	public void updateWindow(JFrame aWindow) {
 
 		this.panel.setLayout(null);
@@ -89,6 +90,7 @@ public class View extends JComponent implements Accessible {
 
 		ArrayList<String> nodes = this.model.getNodes();
 		this.nodeLabel.add(new JLabel("-1"));
+
 		//setup
 		for(int i=1; i<nodes.size(); i++){
 			JLabel aLabel = new JLabel(nodes.get(i));
@@ -171,7 +173,7 @@ public class View extends JComponent implements Accessible {
 		return;
 	}
 	
-
+	/* */
 	public void drawLabel(int address){
 		HashMap<Integer, Integer> branchesMap = this.model.getBranchMap();
 		ArrayList<String> nodes = this.model.getNodes();
@@ -184,7 +186,9 @@ public class View extends JComponent implements Accessible {
 				countReef++;
 			}
 		}
-		if(flag){ 
+		//最端に辿り着いた時。
+		if(flag){
+			this.model.formText();
 			return; 
 		}
 
@@ -224,7 +228,7 @@ public class View extends JComponent implements Accessible {
 				
 				
 				//10ms待機
-				this.sleep(10);
+				this.sleep(1);
 
 				//再描画
 				this.panel.repaint();
@@ -240,6 +244,7 @@ public class View extends JComponent implements Accessible {
 		return;
 	}
 
+	/* */
 	public void sleep(long ms){
 
 		try{
@@ -251,6 +256,7 @@ public class View extends JComponent implements Accessible {
 		return;
 	}
 	
+	/* */
 	public void deleteWordLabel(){
 
 		return;

@@ -3,9 +3,7 @@ package forest;
 import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOError;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,8 +13,10 @@ import java.util.HashMap;
  */
 public class Model extends Object {
 
+	/* */
 	private View view;
 
+	/* */
 	private File file;
 
 	/* 子葉と親葉の対応付け。 branches 16 -> 1 右の数字 -> 左の数字 */
@@ -31,8 +31,10 @@ public class Model extends Object {
 	/* 文字に対応する座標を格納 */
 	private ArrayList<Point> nowPointList;
 
+	/* */
 	private Point point;
 
+	/* */
 	public Model() {
 		this.view = null;
 		this.file = null;
@@ -108,6 +110,7 @@ public class Model extends Object {
 		return;
 	}
 
+	//treeを、整えます。
 	public void formText() {
 
 		return;
@@ -123,6 +126,7 @@ public class Model extends Object {
 		return;
 	}
 
+	/* */
 	public void UpdatePosition(int address, int x, int y) {
 
 		this.nowPointList.set(address, new Point(x, y));
@@ -130,29 +134,33 @@ public class Model extends Object {
 		return;
 	}
 
+	/* */
 	public void setReefAndReef() {
 
 		return;
 	}
 
+	/* */
 	public ArrayList<String> getNodes(){
 
 		return this.nodeList;
 	}
 
+	/* */
 	public HashMap<Integer, Integer> getBranchMap(){
 
 		return this.branchesMap;
 	}
 
+	/* */
 	public ArrayList<Integer> getRoot(){
 		
 		return this.rootList;
 	}
 
+	/* */
 	public ArrayList<Point> getPosition(){
 
 		return this.nowPointList;
 	}
-
 }
