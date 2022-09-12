@@ -129,6 +129,7 @@ public class View extends JComponent implements Accessible {
 		
 		return;
 	}
+	int i=0;
 	
 	/* ラベル移動 */
 	public void moveWordLabel(){
@@ -147,7 +148,7 @@ public class View extends JComponent implements Accessible {
 			// this.drawLabel(address);
 
 			Dimension aDimension = new Dimension(7 * nodes.get(address).length(), 15);
-			Point aPoint = new Point(15, (aDimension.height * (i)) + 100*(i+1));
+			Point aPoint = new Point(15, (aDimension.height * (i)) + 200*(i+1));
 
 			this.nodeLabel.get(address).setFont(new Font(Font.SERIF, Font.PLAIN, 12));
 			this.nodeLabel.get(address).setBounds(aPoint.x, aPoint.y, aDimension.width, aDimension.height);
@@ -162,16 +163,14 @@ public class View extends JComponent implements Accessible {
 
 			this.drawLabel(address);
 
-			
+			//i = 0;
+	
 		}
 		
 		
 		return;
 	}
 	
-	// int h=0;
-	int i=0;
-	boolean end = false;
 
 	public void drawLabel(int address){
 		HashMap<Integer, Integer> branchesMap = this.model.getBranchMap();
@@ -190,19 +189,24 @@ public class View extends JComponent implements Accessible {
 		}
 
 
-		//System.out.println(address);
 		int h=1;
-
+		
 		i++;
-		// h++;
 		for(Integer nowAddress : branchesMap.keySet()){
 			
+			//nowAddressは子供 reef、addressは親root
 			if( branchesMap.get(nowAddress).equals(address)){
+				
+				
 				ArrayList<Point> aPointList = this.model.getPosition();
-
+				
 				Dimension aDimension = new Dimension(7 * nodes.get(nowAddress).length(), 15);
-				Point aPoint = new Point(aPointList.get(address).x + 100*(i),  (aPointList.get(address).y / countReef) + (h * (aPointList.get(address).y / countReef)));
-	
+				// Point aPoint = new Point(aPointList.get(address).x + 100,  ((aPointList.get(address).y) + ((h-1) * (aPointList.get(address).y / countReef) + (5 * aDimension.height))) - ((countReef / 2) * (aPointList.get(address).y / countReef)) );
+				// (親の葉のy座標) - ((葉の数/2) * 幅) + ((葉の数 - 1) * 幅)
+				int width = 2 * aDimension.height;
+				Point aPoint = new Point(aPointList.get(address).x + 150, (aPointList.get(address).y - ((countReef / 2) * (width))) + ((h - 1) * (width)));
+				
+		
 				this.nodeLabel.get(nowAddress).setFont(new Font(Font.SERIF, Font.PLAIN, 12));
 				this.nodeLabel.get(nowAddress).setBounds(aPoint.x, aPoint.y, aDimension.width, aDimension.height);
 				this.nodeLabel.get(nowAddress).setBorder(new LineBorder(Color.BLACK, 2, false));
@@ -214,19 +218,25 @@ public class View extends JComponent implements Accessible {
 	
 				this.model.UpdatePosition(nowAddress, aPoint.x, aPoint.y);
 
-				//i++;
 				System.out.println(nodes.get(nowAddress));
-				System.out.println(i);
+				System.out.printf("i:%d,h:%d\n", i, h);
+				System.out.printf("x:%d,y:%d\n", aPoint.x, aPoint.y);
 				
 				
-				this.sleep(800);
+				//10ms待機
+				this.sleep(10);
 
+				//再描画
+				this.panel.repaint();
+
+				//親の葉の子供の葉を描画
 				this.drawLabel(nowAddress);
 				h++;
+
+
 			}
 		}
 		i--;
-		//h = 0;
 		return;
 	}
 

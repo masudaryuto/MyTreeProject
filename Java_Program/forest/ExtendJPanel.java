@@ -45,9 +45,9 @@ public class ExtendJPanel extends JPanel {
 			}
 		}
 
-		for(Map.Entry<Integer, Integer> entry : branchesMap.entrySet()) {
-			// System.out.println(entry.getKey() + ":" + entry.getValue());
-		}
+		// for(Map.Entry<Integer, Integer> entry : branchesMap.entrySet()) {
+		// 	// System.out.println(entry.getKey() + ":" + entry.getValue());
+		// }
 		
 		return;
 	}	
