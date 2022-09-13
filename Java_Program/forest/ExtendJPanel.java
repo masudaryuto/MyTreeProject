@@ -82,7 +82,7 @@ public class ExtendJPanel extends JPanel {
 				this.graphics.setColor(Color.red);
 				this.graphics.drawLine(aPointLeft.x, aPointLeft.y + (15/2), aPointRight.x + aLabelRight.getWidth(), aPointRight.y + (15/2));
 
-				System.out.println(aLabelRight.getWidth());
+				// System.out.println(aLabelRight.getWidth());
 			}
 		}
 

@@ -34,12 +34,13 @@ public class View extends JComponent implements Accessible {
 
 	/* */
 	public View(Model aModel, Controller aController) {
-
+		super();
 		this.model = aModel;
 		this.controller = aController;
 		this.nodeLabel = new ArrayList<>();
 		this.panel = new ExtendJPanel(aModel);
 
+		this.controller.setView(this);
 		return;
 	}
 
@@ -62,7 +63,10 @@ public class View extends JComponent implements Accessible {
 			System.out.println("You chose to open this file: " +
 			chooser.getSelectedFile().getName());
 			this.model.readText(chooser.getSelectedFile());
-
+			
+			//マウスイベント
+			aWindow.addMouseListener(this.controller);
+			aWindow.addMouseMotionListener(this.controller);
 			// 高さはタイトルバーの高さを考慮してウィンドウの大きさを決定する。
 			aWindow.addNotify();
 			int titleBarHeight = aWindow.getInsets().top;
@@ -76,6 +80,9 @@ public class View extends JComponent implements Accessible {
 			//描画の更新
 			this.updateWindow(aWindow);
 		}
+		
+		
+		// this.displayWindow();
 
 		return;
 	}
@@ -127,14 +134,16 @@ public class View extends JComponent implements Accessible {
 		// * それぞれの単語の初期座標を記録して、関数を利用して、その単語の座標が変わったら、
 		// その単語の座標を変更できるようにする必要がある。
 		
-		this.moveWordLabel();
+		this.simpleWriteLabel();
+
+		// this.controller.setModel(this.model);
+
 		
 		return;
 	}
-	int i=0;
 	
 	/* ラベル移動 */
-	public void moveWordLabel(){
+	public void simpleWriteLabel(){
 		
 		ArrayList<Integer> rootList = this.model.getRoot();
 		ArrayList<String> nodes = this.model.getNodes();
@@ -165,8 +174,6 @@ public class View extends JComponent implements Accessible {
 
 			this.drawLabel(address);
 
-			//i = 0;
-	
 		}
 		
 		
@@ -188,14 +195,12 @@ public class View extends JComponent implements Accessible {
 		}
 		//最端に辿り着いた時。
 		if(flag){
-			this.model.formText();
 			return; 
 		}
 
 
 		int h=1;
 		
-		i++;
 		for(Integer nowAddress : branchesMap.keySet()){
 			
 			//nowAddressは子供 reef、addressは親root
@@ -223,12 +228,10 @@ public class View extends JComponent implements Accessible {
 				this.model.UpdatePosition(nowAddress, aPoint.x, aPoint.y);
 
 				System.out.println(nodes.get(nowAddress));
-				System.out.printf("i:%d,h:%d\n", i, h);
-				System.out.printf("x:%d,y:%d\n", aPoint.x, aPoint.y);
 				
 				
 				//10ms待機
-				this.sleep(1);
+				this.sleep(100);
 
 				//再描画
 				this.panel.repaint();
@@ -240,15 +243,53 @@ public class View extends JComponent implements Accessible {
 
 			}
 		}
-		i--;
+		
+		this.model.formText(address);
+
 		return;
 	}
 
+	public void moveLabel(int address){
+		HashMap<Integer, Integer> branchesMap = this.model.getBranchMap();
+		ArrayList<String> nodes = this.model.getNodes();
+				
+		ArrayList<Point> aPointList = this.model.getPosition();
+				
+		Dimension aDimension = new Dimension(7 * nodes.get(address).length(), 15);
+		// Point aPoint = new Point(aPointList.get(address).x + 100,  ((aPointList.get(address).y) + ((h-1) * (aPointList.get(address).y / countReef) + (5 * aDimension.height))) - ((countReef / 2) * (aPointList.get(address).y / countReef)) );
+		// (親の葉のy座標) - ((葉の数/2) * 幅) + ((葉の数 - 1) * 幅)
+		Point aPoint = aPointList.get(address);
+		
+
+		this.nodeLabel.get(address).setFont(new Font(Font.SERIF, Font.PLAIN, 12));
+		this.nodeLabel.get(address).setBounds(aPoint.x, aPoint.y, aDimension.width, aDimension.height);
+		this.nodeLabel.get(address).setBorder(new LineBorder(Color.BLACK, 2, false));
+		this.nodeLabel.get(address).setHorizontalAlignment(JLabel.CENTER);
+
+		//サイズの自動化？
+		this.nodeLabel.get(address).setSize(this.nodeLabel.get(address).getPreferredSize());
+		this.panel.add(this.nodeLabel.get(address));
+
+		// this.model.UpdatePosition(address, aPoint.x, aPoint.y);
+
+		// System.out.println(nodes.get(address));
+		
+		
+		//10ms待機
+		// this.sleep(100);
+
+		//再描画
+		this.panel.repaint();
+
+
+
+		return;
+	}
 	/* */
 	public void sleep(long ms){
 
 		try{
-			Thread.sleep(800);
+			Thread.sleep(ms);
 		}catch(InterruptedException e){
 			System.err.println(e);
 		}

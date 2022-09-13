@@ -9,14 +9,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /*
- * 
+ * モデル(Model)クラスを定義しています。
  */
 public class Model extends Object {
 
-	/* */
+	/*Viewデータ*/
 	private View view;
 
-	/* */
+	/*ファイルデータ*/
 	private File file;
 
 	/* 子葉と親葉の対応付け。 branches 16 -> 1 右の数字 -> 左の数字 */
@@ -31,11 +31,12 @@ public class Model extends Object {
 	/* 文字に対応する座標を格納 */
 	private ArrayList<Point> nowPointList;
 
-	/* */
+	/*座標*/
 	private Point point;
 
-	/* */
+	/*Modelのコンストラクタ*/
 	public Model() {
+		super();
 		this.view = null;
 		this.file = null;
 		this.branchesMap = new HashMap<>();
@@ -84,9 +85,7 @@ public class Model extends Object {
 				}
 			}
 			aBufferedReader.close();
-
 		}catch(IOException e){
-
 			System.err.println();
 		}
 
@@ -111,7 +110,14 @@ public class Model extends Object {
 	}
 
 	//treeを、整えます。
-	public void formText() {
+	public void formText(int address) {
+
+		// int parentAddress = this.branchesMap.get(address);
+
+		// this.UpdatePosition(address, x, y);
+
+
+
 
 		return;
 	}
@@ -126,7 +132,7 @@ public class Model extends Object {
 		return;
 	}
 
-	/* */
+	/*現在の座標リストを更新します。*/
 	public void UpdatePosition(int address, int x, int y) {
 
 		this.nowPointList.set(address, new Point(x, y));
@@ -140,25 +146,25 @@ public class Model extends Object {
 		return;
 	}
 
-	/* */
+	/*葉のリストを返します。*/
 	public ArrayList<String> getNodes(){
 
 		return this.nodeList;
 	}
 
-	/* */
+	/*枝の組み合わせmapを返します。*/
 	public HashMap<Integer, Integer> getBranchMap(){
 
 		return this.branchesMap;
 	}
 
-	/* */
+	/*根のデータを返します。*/
 	public ArrayList<Integer> getRoot(){
 		
 		return this.rootList;
 	}
 
-	/* */
+	/*現在座標を返します。*/
 	public ArrayList<Point> getPosition(){
 
 		return this.nowPointList;
