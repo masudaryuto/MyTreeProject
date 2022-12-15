@@ -80,6 +80,14 @@ public class View extends JComponent implements Accessible {
 			//描画の更新
 			this.updateWindow(aWindow);
 		}
+		else if(returnVal == JFileChooser.CANCEL_OPTION){
+			System.out.println("cancel");
+			displayWindow();
+		}
+		else if(returnVal == JFileChooser.ERROR_OPTION){
+			System.out.println("error");
+		}
+		
 		
 		
 		// this.displayWindow();
@@ -138,11 +146,12 @@ public class View extends JComponent implements Accessible {
 
 		// this.controller.setModel(this.model);
 
-		
+
 		return;
 	}
 	
 	/* ラベル移動 */
+	int countChildReef = 0;
 	public void simpleWriteLabel(){
 		
 		ArrayList<Integer> rootList = this.model.getRoot();
@@ -158,8 +167,10 @@ public class View extends JComponent implements Accessible {
 			// System.out.println(address)
 			// this.drawLabel(address);
 
+			
 			Dimension aDimension = new Dimension(7 * nodes.get(address).length(), 15);
-			Point aPoint = new Point(15, (aDimension.height * (i)) + 200*(i+1));
+			int width = 2 * aDimension.height + countChildReef;
+			Point aPoint = new Point(15, (aDimension.height * (i)) + 200*(i+1) + width);
 
 			this.nodeLabel.get(address).setFont(new Font(Font.SERIF, Font.PLAIN, 12));
 			this.nodeLabel.get(address).setBounds(aPoint.x, aPoint.y, aDimension.width, aDimension.height);
@@ -173,9 +184,9 @@ public class View extends JComponent implements Accessible {
 			this.model.UpdatePosition(address, aPoint.x, aPoint.y);
 
 			this.drawLabel(address);
-
+			
+			// break;
 		}
-		
 		
 		return;
 	}
@@ -184,17 +195,33 @@ public class View extends JComponent implements Accessible {
 	public void drawLabel(int address){
 		HashMap<Integer, Integer> branchesMap = this.model.getBranchMap();
 		ArrayList<String> nodes = this.model.getNodes();
+		ArrayList<Point> aPointList = this.model.getPosition();
 		boolean flag = true;
 		int countReef = 0;
+
+		//nowAddressは
 		for(Integer nowAddress : branchesMap.values()){
 
+
+			//nowAddressの親がaddressと同じである場合。
 			if( nowAddress.equals(address)){
 				flag = false;
 				countReef++;
 			}
+
+
 		}
+
 		//最端に辿り着いた時。
 		if(flag){
+			// System.out.println(nodes.get(address));
+			// this.model.formText(address);
+			// this.model.UpdatePosition(address, aPointList.get(address).x, aPointList.get(address).y + 15*(countChildReef/2));
+			// 再描画
+			// this.moveLabel(address);
+			// this.sleep(100);
+			// countChildReef = 0;
+
 			return; 
 		}
 
@@ -207,13 +234,13 @@ public class View extends JComponent implements Accessible {
 			if( branchesMap.get(nowAddress).equals(address)){
 				
 				
-				ArrayList<Point> aPointList = this.model.getPosition();
 				
 				Dimension aDimension = new Dimension(7 * nodes.get(nowAddress).length(), 15);
 				// Point aPoint = new Point(aPointList.get(address).x + 100,  ((aPointList.get(address).y) + ((h-1) * (aPointList.get(address).y / countReef) + (5 * aDimension.height))) - ((countReef / 2) * (aPointList.get(address).y / countReef)) );
 				// (親の葉のy座標) - ((葉の数/2) * 幅) + ((葉の数 - 1) * 幅)
-				int width = 2 * aDimension.height;
-				Point aPoint = new Point(aPointList.get(address).x + 150, (aPointList.get(address).y - ((countReef / 2) * (width))) + ((h - 1) * (width)));
+				int width = 2 * aDimension.height + countChildReef;
+				// Point aPoint = new Point(aPointList.get(address).x + 150, (aPointList.get(address).y - ((countReef / 2) * (width))) + ((h - 1) * (width)));
+				Point aPoint = new Point(aPointList.get(address).x + 150, (aPointList.get(address).y) + ((h - 1) * (width)));
 				
 		
 				this.nodeLabel.get(nowAddress).setFont(new Font(Font.SERIF, Font.PLAIN, 12));
@@ -227,24 +254,52 @@ public class View extends JComponent implements Accessible {
 	
 				this.model.UpdatePosition(nowAddress, aPoint.x, aPoint.y);
 
-				System.out.println(nodes.get(nowAddress));
+				// System.out.println(nodes.get(nowAddress));
 				
 				
 				//10ms待機
-				this.sleep(100);
+				this.sleep(400);
 
 				//再描画
 				this.panel.repaint();
 
+				countChildReef = 0;
 				//親の葉の子供の葉を描画
 				this.drawLabel(nowAddress);
+
 				h++;
+				// countChildReef++;
 
 
 			}
 		}
+
+		this.model.UpdatePosition(address, aPointList.get(address).x, aPointList.get(address).y + 15*(countReef/2));
+		//再描画
+		this.moveLabel(address);
+		this.sleep(100);
 		
-		this.model.formText(address);
+		Integer startAddress = 0;
+		Integer endAddress = 0;
+		Boolean onceFlag = false;
+		for(Integer nowAddress : branchesMap.keySet()){
+			//nowAddressの親がaddressと同じである場合。
+			if( branchesMap.get(nowAddress).equals(address)){
+				if(!onceFlag){
+					startAddress = nowAddress;
+					onceFlag = true;
+				}
+				System.out.println(nodes.get(nowAddress));
+
+				endAddress = nowAddress;
+			}
+			
+			
+		}
+		
+		countChildReef = aPointList.get(endAddress).y - aPointList.get(startAddress).y;
+		System.out.println();
+
 
 		return;
 	}

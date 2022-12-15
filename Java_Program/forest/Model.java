@@ -109,7 +109,7 @@ public class Model extends Object {
 		return;
 	}
 
-	//treeを、整えます。
+	/*treeを、整えます。*/
 	public void formText(int address) {
 
 		// int parentAddress = this.branchesMap.get(address);
@@ -168,5 +168,10 @@ public class Model extends Object {
 	public ArrayList<Point> getPosition(){
 
 		return this.nowPointList;
+	}
+
+	public int getChildNum(int address){
+
+		return 1;
 	}
 }

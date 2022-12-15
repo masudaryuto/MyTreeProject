@@ -53,7 +53,7 @@ public class Controller extends Object implements MouseListener, MouseMotionList
 	
 		this.clickFlag ^= true;
 	
-		Cursor aCursor = Cursor.getDefaultCursor();
+		Cursor aCursor = Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
 		Component aComponent = (Component)e.getSource();
 		aComponent.setCursor(aCursor);
 	
@@ -62,7 +62,13 @@ public class Controller extends Object implements MouseListener, MouseMotionList
 		return; 
 	}
 
-	public void mouseReleased(MouseEvent e){ return; }
+	public void mouseReleased(MouseEvent e){
+		Cursor aCursor = Cursor.getDefaultCursor();
+		Component aComponent = (Component)e.getSource();
+		aComponent.setCursor(aCursor);
+
+		return; 
+	}
 
 	
 	public void mouseMoved(MouseEvent e){ return; }
